@@ -115,7 +115,7 @@ class App extends Component {
                 <Container>
                   <Row>
                     <Col xs={3}>Address</Col>
-                    <Col>{this.state.loading ? <Spinner size="sm" animation="border"/> : this.state.account}</Col>
+                    <Col>{this.state.account}</Col>
                   </Row>
                   <Row>
                     <Col xs={3}>Ether Balance</Col>
