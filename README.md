@@ -1,5 +1,5 @@
 # aavedebo
-deposit ETH and borrow DAI to and from Aave 
+deposit ETH to and borrow DAI from Aave 
 
 AaveDeBo should deposit a certain amount of ETH to AAVE Lending Pool and borrow a certain amount from the Lending Pool.
 However, at moment, WETHGateway.depositETH function called in depositETHAndBorrowDAI in AaveDeBo.sol is not working.
