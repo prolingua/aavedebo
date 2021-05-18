@@ -11,6 +11,14 @@ const daiAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 
 const web3 = new Web3(window.ethereum);
 
+const ether = (n) => {
+  return new Web3.utils.BN(
+    web3.utils.toWei(n.toString(), 'ether')
+  )
+};
+
+const tokens = (n) => ether(n);
+
 class App extends Component {
   
   async componentDidMount() {
@@ -66,13 +74,13 @@ class App extends Component {
     e.preventDefault();
     console.log(this.state.etherToDeposit);
 
-    const etherToDeposit = this.state.etherToDeposit * 10**18;
+    const etherToDeposit = ether(this.state.etherToDeposit);
     
-    const daiToBorrow = ((etherToDeposit * 3600 * 3) / 4).toFixed(0) ;
+    const daiToBorrow = ((this.state.etherToDeposit * 3600 * 3) / 4).toFixed(0) ;
     console.log(daiToBorrow);
     this.setState({loading:true});
     try{
-      await this.state.aaveDeBo.methods.depositETHAndBorrowDAI(daiToBorrow.toString()).send({value: etherToDeposit.toString(), from: this.state.account});
+      await this.state.aaveDeBo.methods.depositETHAndBorrowDAI(tokens(daiToBorrow)).send({value: etherToDeposit.toString(), from: this.state.account});
       const etherBalance = await web3.eth.getBalance(this.state.account);  
       const daiBalance = await this.state.dai.methods.balanceOf(this.state.account).call();
       this.setState({loading:false, etherBalance, daiBalance});       
