@@ -6,6 +6,7 @@ import Web3 from 'web3';
 import React, { Component } from 'react';
 import logo from '../logo.png';
 import './App.css';
+import axios from 'axios';
 
 const daiAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
 
@@ -19,13 +20,36 @@ const ether = (n) => {
 
 const tokens = (n) => ether(n);
 
+var exchangeRates = [];
+var etherRate;
+var daiRate;
+var etherToDai = 3500;
 class App extends Component {
   
   async componentDidMount() {
     await this.loadBlockchainData();
+    await this.getEtherToDaiRate();
   }
 
-  
+  async getEtherToDaiRate() {
+    try{
+      var result = await axios.get("https://api.nomics.com/v1/prices?key=803597763badf130692517ef11c70422917e4642");
+      exchangeRates = result.data;
+      etherRate = exchangeRates.filter(ex => ex.currency == "ETH");
+      daiRate = exchangeRates.filter(ex => ex.currency == "DAI");
+      console.log(etherRate);
+      console.log(etherRate[0].price);    
+      console.log(daiRate);
+      console.log(daiRate[0].price);
+      etherToDai = (etherRate[0].price/daiRate[0].price).toFixed(0);
+      console.log(etherToDai);
+    }
+    catch(err){
+      console.log(err);
+    }
+    
+  }
+
   async loadBlockchainData() {
     //check if Metamask exists
     this.setState({loading:true});
@@ -72,11 +96,14 @@ class App extends Component {
 
   async depositEther(e){
     e.preventDefault();
+
+    await this.getEtherToDaiRate();
+
     console.log(this.state.etherToDeposit);
 
     const etherToDeposit = ether(this.state.etherToDeposit);
     
-    const daiToBorrow = ((this.state.etherToDeposit * 3600 * 3) / 4).toFixed(0) ;
+    const daiToBorrow = ((this.state.etherToDeposit * etherToDai * 3) / 4).toFixed(0) ;
     console.log(daiToBorrow);
     this.setState({loading:true});
     try{
