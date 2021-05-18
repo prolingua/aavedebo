@@ -2,9 +2,6 @@
 deposit ETH to and borrow DAI from Aave 
 
 AaveDeBo should deposit a certain amount of ETH to AAVE Lending Pool and borrow a certain amount from the Lending Pool.
-However, at moment, WETHGateway.depositETH function called in depositETHAndBorrowDAI in AaveDeBo.sol is not working.
-
-The front-end is ready.
 
 Instructions:
 1. Install all dependencies by running 'npm install' on a prompt command at the project directory.
