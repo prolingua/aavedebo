@@ -64,8 +64,20 @@ contract('Test', ([deployer, user1]) => {
                 await aaveDeBo.depositETHAndBorrowDAI(amountToBorrow, {from: user1, value: amountToDeposit});
 
                 const etherBalance2 = await web3.eth.getBalance(user1); // ether balance after depositing
-                const daiBalance2 = Number(await dai.balanceOf(user1));  // dai balance after borrowing                
+                const daiBalance2 = await dai.balanceOf(user1);  // dai balance after borrowing                
 
+                const daiBalanceBeforeInDai = await web3.utils.fromWei(daiBalance1.toString());
+                console.log(daiBalanceBeforeInDai);
+
+                const daiToBorrowInDai = await web3.utils.fromWei(amountToBorrow.toString());
+                console.log(daiToBorrowInDai);
+
+                const daiBalanceAfterInDai = await web3.utils.fromWei(daiBalance2.toString());
+                console.log(daiBalanceAfterInDai);
+
+                console.log(daiBalanceBeforeInDai * 1 + daiToBorrowInDai * 1);
+
+                daiBalanceAfterInDai.toString().should.be.equal((daiBalanceBeforeInDai * 1 + daiToBorrowInDai * 1).toString());
                 expect(Number(daiBalance2)).to.be.above(Number(daiBalance1)); // dai balance now must be greater than dai balance before depositing
                 expect(Number(etherBalance1)).to.be.above(Number(etherBalance2)); // initial ether balance must be greater than ether balance after depositing
             })
